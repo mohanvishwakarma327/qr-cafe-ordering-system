@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Thank You</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #0d47a1, #1976d2);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      text-align: center;
+    }
+
+    .popup {
+      background-color: white;
+      color: #333;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
+      max-width: 400px;
+      width: 90%;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .popup h2 {
+      color: #0d47a1;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .popup p {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .popup .checkmark {
+      font-size: 60px;
+      color: #43a047;
+      margin-bottom: 20px;
+    }
+
+    .popup .btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #d32f2f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .popup .btn:hover {
+      background-color: #b71c1c;
+    }
+
+    footer {
+      margin-top: 30px;
+      color: white;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .footer-icons a {
+      color: white;
+      margin: 0 10px;
+      font-size: 18px;
+      transition: color 0.3s;
+    }
+
+    .footer-icons a:hover {
+      color: #ffccbc;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="popup">
+    <div class="checkmark"><i class="fas fa-check-circle"></i></div>
+    <h2>Thank You!</h2>
+    <p>Your order from <strong>Seat {{ seat_id }}</strong> has been placed successfully.</p>
+    <p>Redirecting back to menu...</p>
+    <button class="btn" onclick="location.href='/menu/{{ seat_id }}'">Back to Menu</button>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Boardroom Pantry Service</p>
+
+  </footer>
+
+  <script>
+    setTimeout(() => {
+      window.location.href = "/menu/{{ seat_id }}";
+    }, 5000);
+  </script>
+
+</body>
+</html>

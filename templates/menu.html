@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu - Seat {{ seat_id }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #0d47a1;
+      --button-color: #d32f2f;
+      --gray-text: #333;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: url('https://i.pinimg.com/736x/48/75/4b/48754bee92b237d64b4dee0391ceac2d.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(2px);
+      z-index: 0;
+    }
+
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 15px 20px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+    }
+
+    .header-left img {
+      height: 40px;
+    }
+
+    .animated-title {
+      display: flex;
+      align-items: center;
+      position: relative;
+      font-size: 22px;
+    }
+
+    .animated-title .fa-mug-hot {
+      font-size: 28px;
+      margin-right: 10px;
+      position: relative;
+    }
+
+    .steam {
+      position: absolute;
+      top: -12px;
+      left: 4px;
+      width: 10px;
+      height: 35px;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.8) 0%, transparent 70%);
+      animation: floatSteam 2s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    @keyframes floatSteam {
+      0% { transform: translateY(0); opacity: 0.6; }
+      50% { transform: translateY(-10px); opacity: 0.9; }
+      100% { transform: translateY(-20px); opacity: 0; }
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    h2 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .drink-options {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .drink-options label {
+      font-size: 16px;
+      color: var(--gray-text);
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .drink-options i {
+      font-size: 28px;
+      margin-right: 8px;
+      color: var(--primary-color);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    input[type="radio"] {
+      margin-right: 6px;
+    }
+
+    .section-box {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 2px solid #e0e0e0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .section-box h3 {
+      color: var(--primary-color);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+    }
+
+    .section-box h3 i {
+      font-size: 22px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    label {
+      font-weight: 500;
+      margin-top: 15px;
+      display: block;
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 5px;
+      background: #fff;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      color: #fff;
+      background-color: var(--button-color);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-top: 20px;
+    }
+
+    button:hover {
+      background-color: #b71c1c;
+    }
+
+    .spinner {
+      display: none;
+      margin: 10px auto;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid var(--primary-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 15px;
+      position: relative;
+      z-index: 10;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .drink-options {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+
+  <script>
+    function toggleDropdowns() {
+      const teaRadio = document.querySelector('input[value="Tea"]');
+      const coffeeRadio = document.querySelector('input[value="Coffee"]');
+      document.getElementById("tea-options").style.display = teaRadio.checked ? "block" : "none";
+      document.getElementById("coffee-options").style.display = coffeeRadio.checked ? "block" : "none";
+    }
+
+    window.onload = () => {
+      document.querySelectorAll('input[name="drink"]').forEach(radio =>
+        radio.addEventListener('change', toggleDropdowns)
+      );
+
+      const form = document.querySelector("form");
+      form.addEventListener("submit", () => {
+        document.querySelector(".spinner").style.display = "block";
+        form.querySelector("button").disabled = true;
+      });
+    };
+  </script>
+</head>
+
+<body>
+  <header>
+    <div class="header-left">
+      <img src="/static/logoo.png" alt="Logo">
+      <h1 class="animated-title">
+        <span class="steam"></span>
+        <i class="fas fa-mug-hot"></i> Board Room
+      </h1>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h2>Welcome</h2>
+      <form method="post">
+        <div class="drink-options">
+          <label>
+            <input type="radio" name="drink" value="Tea" required>
+            <i class="fas fa-mug-hot"></i> Tea
+          </label>
+          <label>
+            <input type="radio" name="drink" value="Coffee" required>
+            <i class="fas fa-coffee"></i> Coffee
+          </label>
+        </div>
+
+        <div class="section-box" id="tea-options" style="display:none;">
+          <h3><i class="fas fa-leaf"></i> Tea Preferences</h3>
+          <label>Milk Preference</label>
+          <select name="extras_tea_milk">
+            <option value="">Select</option>
+            <option value="Regular milk">Regular milk</option>
+            <option value="Less milk">Less milk</option>
+            <option value="No milk">No milk</option>
+          </select>
+
+          <label>Sugar Level</label>
+          <select name="extras_tea_sugar">
+            <option value="">Select</option>
+            <option value="No sugar">No sugar</option>
+            <option value="Less sugar">Less sugar</option>
+            <option value="Normal sugar">Normal sugar</option>
+          </select>
+        </div>
+
+        <div class="section-box" id="coffee-options" style="display:none;">
+          <h3><i class="fas fa-coffee"></i> Coffee Preferences</h3>
+          <label>Coffee Style</label>
+          <select name="extras_coffee_style">
+            <option value="">Select</option>
+            <option value="Black">Black</option>
+            <option value="With milk">With milk</option>
+            <option value="Strong">Strong</option>
+            <option value="Light">Light</option>
+          </select>
+
+          <label>Sugar Level</label>
+          <select name="extras_coffee_sugar">
+            <option value="">Select</option>
+            <option value="No sugar">No sugar</option>
+            <option value="Less sugar">Less sugar</option>
+            <option value="Normal sugar">Normal sugar</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="extras"><i class="fas fa-pen"></i> Anything extra?</label>
+          <textarea name="extras" id="extras" placeholder="Type here..." rows="3"></textarea>
+        </div>
+
+        <div class="spinner"></div>
+        <button type="submit"><i class="fas fa-paper-plane"></i> Place Order</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Boardroom Pantry Service</p>
+  </footer>
+</body>
+</html>
+

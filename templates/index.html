@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu - Seat {{ seat_id }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        .drink-options i {
+            font-size: 32px;
+            margin-right: 10px;
+            color: #1a237e;
+        }
+        .form-group select {
+            padding: 8px;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .dropdown-section {
+            display: none;
+            margin-top: 15px;
+        }
+    </style>
+    <script>
+        function toggleDropdowns() {
+            const teaRadio = document.querySelector('input[value="Tea"]');
+            const coffeeRadio = document.querySelector('input[value="Coffee"]');
+            document.getElementById("tea-options").style.display = teaRadio.checked ? "block" : "none";
+            document.getElementById("coffee-options").style.display = coffeeRadio.checked ? "block" : "none";
+        }
+
+        window.onload = () => {
+            const radios = document.querySelectorAll('input[name="drink"]');
+            radios.forEach(radio => radio.addEventListener('change', toggleDropdowns));
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-mug-hot"></i> Boardroom Beverage Ordering</h1>
+    </header>
+
+    <div class="container">
+        <h2>Welcome, Seat <span class="seat-id">{{ seat_id }}</span></h2>
+        <form method="post">
+            <div class="form-group drink-options">
+                <label>
+                    <input type="radio" name="drink" value="Tea" required>
+                    <i class="fas fa-tea"></i> Tea
+                </label>
+                <label>
+                    <input type="radio" name="drink" value="Coffee" required>
+                    <i class="fas fa-coffee"></i> Coffee
+                </label>
+            </div>
+
+            <!-- Tea-specific options -->
+            <div class="form-group dropdown-section" id="tea-options">
+                <label><i class="fas fa-milk"></i> Milk preference (Tea)</label>
+                <select name="extras_tea_milk">
+                    <option value="">-- Select --</option>
+                    <option value="Regular milk">Regular milk</option>
+                    <option value="Less milk">Less milk</option>
+                    <option value="No milk">No milk</option>
+                </select>
+
+                <label style="margin-top: 10px;"><i class="fas fa-cubes"></i> Sugar level</label>
+                <select name="extras_tea_sugar">
+                    <option value="">-- Select --</option>
+                    <option value="No sugar">No sugar</option>
+                    <option value="Less sugar">Less sugar</option>
+                    <option value="Extra sugar">Extra sugar</option>
+                </select>
+            </div>
+
+            <!-- Coffee-specific options -->
+            <div class="form-group dropdown-section" id="coffee-options">
+                <label><i class="fas fa-coffee"></i> Coffee style</label>
+                <select name="extras_coffee_style">
+                    <option value="">-- Select --</option>
+                    <option value="Black">Black</option>
+                    <option value="With milk">With milk</option>
+                    <option value="Strong">Strong</option>
+                    <option value="Light">Light</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="extras"><i class="fas fa-pen"></i> Anything extra?</label>
+                <textarea name="extras" id="extras" placeholder="e.g., no foam, strong aroma" rows="3"></textarea>
+            </div>
+
+            <button type="submit"><i class="fas fa-paper-plane"></i> Place Order</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Boardroom Pantry Service</p>
+    </footer>
+</body>
+</html>

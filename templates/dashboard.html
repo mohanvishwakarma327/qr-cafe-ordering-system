@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pantry Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --brand-blue: #00518F;
+      --brand-red: #C4261D;
+      --bg-overlay: rgba(255, 255, 255, 0.92);
+      --white: #fff;
+      --text-gray: #222;
+      --table-bg: #fff;
+      --header-bg: linear-gradient(90deg, #003d73, #00518f);
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: url('https://images.unsplash.com/photo-1556909114-11dd040b33c9?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--bg-overlay);
+      z-index: -1;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      margin: 0;
+    }
+
+    .live-time {
+      font-size: 0.9rem;
+      margin-top: 4px;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .dashboard-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .total-count {
+      background-color: var(--brand-blue);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn-clear,
+    .btn-export {
+      padding: 10px 20px;
+      font-weight: 600;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn-clear {
+      background-color: var(--brand-red);
+    }
+
+    .btn-clear:hover {
+      background-color: #9f1d17;
+    }
+
+    .btn-export {
+      background-color: var(--brand-blue);
+    }
+
+    .btn-export:hover {
+      background-color: #003d73;
+    }
+
+    form.export-form {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    table.dashboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--table-bg);
+      box-shadow: 0 0 14px rgba(0,0,0,0.06);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    table th, table td {
+      padding: 14px 12px;
+      text-align: center;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    table th {
+      background-color: #f0f8ff;
+      font-weight: 600;
+    }
+
+    table tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .pending { color: #f57c00; font-weight: bold; }
+    .preparing { color: #1976d2; font-weight: bold; }
+    .completed { color: #2e7d32; font-weight: bold; }
+
+    .btn-status {
+      padding: 6px 14px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-preparing {
+      background-color: #1976d2;
+    }
+
+    .btn-preparing:hover {
+      background-color: #135ba0;
+    }
+
+    .btn-complete {
+      background-color: #2e7d32;
+    }
+
+    .btn-complete:hover {
+      background-color: #256028;
+    }
+
+    .spinner {
+      display: none;
+      margin-left: 10px;
+    }
+
+    .spinner.active {
+      display: inline-block;
+      animation: spin 1s linear infinite;
+      font-size: 18px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .toast-alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #00518F;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 9999;
+      font-weight: bold;
+      display: none;
+    }
+
+    footer {
+      background: var(--header-bg);
+      color: white;
+      text-align: center;
+      padding: 16px;
+      font-weight: 500;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      margin-left: 16px;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      header, .dashboard-controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .dashboard-controls {
+        align-items: stretch;
+      }
+
+      table th, table td {
+        padding: 10px 6px;
+        font-size: 14px;
+      }
+
+      .btn-status {
+        font-size: 14px;
+        padding: 5px 10px;
+      }
+    }
+  </style>
+
+  <audio id="notifySound" src="/static/alarm.mp3" preload="auto"></audio>
+
+  <script>
+    let lastOrderCount = 0;
+
+    function updateTime() {
+      const now = new Date();
+      document.getElementById('liveTime').textContent = now.toLocaleTimeString();
+    }
+
+    function showSpinner() {
+      document.getElementById("loadingSpinner").classList.add("active");
+    }
+
+    function hideSpinner() {
+      document.getElementById("loadingSpinner").classList.remove("active");
+    }
+
+    function showMessage(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'toast-alert';
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+        document.body.removeChild(toast);
+      }, 4000);
+    }
+
+    function loadOrders() {
+      showSpinner();
+      fetch('/orders/live')
+        .then(response => response.json())
+        .then(data => {
+          const newCount = data.length;
+          const tbody = document.getElementById('orderTableBody');
+          const countDisplay = document.getElementById('totalCount');
+          tbody.innerHTML = '';
+          countDisplay.textContent = `Total Orders: ${newCount}`;
+          hideSpinner();
+
+          if (newCount > lastOrderCount) {
+            document.getElementById("notifySound").play();
+            showMessage("🔔 New Order Received!");
+          }
+
+          lastOrderCount = newCount;
+
+          data.forEach(order => {
+            const row = document.createElement('tr');
+            let statusHTML = '';
+            let actionsHTML = '';
+
+            if (order.status === 'Pending') {
+              statusHTML = '<span class="pending"><i class="fas fa-clock"></i> Pending</span>';
+              actionsHTML = `
+                <form method="POST" action="/orders/update/${order.id}/Preparing">
+                  <button class="btn-status btn-preparing" type="submit">Set Preparing</button>
+                </form>`;
+            } else if (order.status === 'Preparing') {
+              statusHTML = '<span class="preparing"><i class="fas fa-utensils"></i> Preparing</span>';
+              actionsHTML = `
+                <form method="POST" action="/orders/update/${order.id}/Completed">
+                  <button class="btn-status btn-complete" type="submit">Mark Completed</button>
+                </form>`;
+            } else {
+              statusHTML = '<span class="completed"><i class="fas fa-check-circle"></i> Completed</span>';
+              actionsHTML = '-';
+            }
+
+            row.innerHTML = `
+              <td><i class="fas fa-chair"></i> ${order.seat_id}</td>
+              <td><i class="fas fa-mug-hot"></i> ${order.drink}</td>
+              <td>${order.extras}</td>
+              <td>${statusHTML}</td>
+              <td>${order.booking_time}</td>
+              <td>${actionsHTML}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        })
+        .catch(() => hideSpinner());
+    }
+
+    function clearCompletedOrders() {
+      showSpinner();
+      fetch('/orders/clear', {
+        method: 'POST'
+      }).then(() => {
+        loadOrders();
+      }).catch(() => {
+        hideSpinner();
+        alert("Failed to clear completed orders.");
+      });
+    }
+
+    setInterval(updateTime, 1000);
+    setInterval(loadOrders, 5000);
+  </script>
+</head>
+
+<body onload="updateTime(); loadOrders();">
+  <header>
+    <div>
+      <h1><i class="fas fa-clipboard-list"></i> Pantry Dashboard</h1>
+      <p class="live-time">Live at: <span id="liveTime"></span></p>
+    </div>
+    <div>
+      <a href="/change-password"><i class="fas fa-key"></i> Change Password</a>
+      <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="dashboard-controls">
+      <span class="total-count" id="totalCount">Total Orders: 0</span>
+      <form class="export-form" method="GET" action="/orders/export/csv">
+        <input type="month" name="month" value="{{ current_month }}" />
+        <button type="submit" class="btn-export"><i class="fas fa-download"></i> Export CSV</button>
+        <button class="btn-clear" onclick="clearCompletedOrders()" type="button"><i class="fas fa-trash-alt"></i> Clear Completed</button>
+        <i id="loadingSpinner" class="fas fa-spinner spinner"></i>
+      </form>
+    </div>
+
+    <table class="dashboard-table">
+      <thead>
+        <tr>
+          <th>Seat No.</th>
+          <th>Drink</th>
+          <th>Extras</th>
+          <th>Status</th>
+          <th>Booking Time</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="orderTableBody">
+        <!-- Orders will be inserted here -->
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Boardroom Pantry Service</p>
+  </footer>
+</body>
+</html>
